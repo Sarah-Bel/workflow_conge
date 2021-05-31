@@ -59,10 +59,10 @@ public class CongeService {
     public ProcessInstanceResponse applyHoliday(TDemande tDemande) {
 
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("Type conge", tDemande.getTypeconge());
-        variables.put("Date Debut", tDemande.getDateDebut());
-        variables.put("Date Fin", tDemande.getDateFin());
-        variables.put("Commentaire", tDemande.getCommentaire());
+        variables.put("congeType", tDemande.getCongeType());
+        variables.put("dateDebut", tDemande.getDateDebut());
+        variables.put("dateFin", tDemande.getDateFin());
+        variables.put("comment", tDemande.getComment());
         variables.put("employee", tDemande.getEmpName());
 
         ProcessInstance processInstance =
@@ -145,9 +145,9 @@ public class CongeService {
         taskService.complete(taskId, variables);
     }
 
-    public List<TDemande> rechercheConge(String Commentaire,String Typeconge, String empName) {
+    public List<TDemande> rechercheConge(String comment,String congeType, String empName) {
     	
-    return congeRepository.findByrechercheid(Commentaire,Typeconge,empName);
+    return congeRepository.findByrechercheid(comment,congeType,empName);
     
     }
     
