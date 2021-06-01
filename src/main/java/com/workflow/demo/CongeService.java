@@ -28,10 +28,11 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CongeService {
-
+	
+	
     public static final String TASK_CANDIDATE_GROUP = "managers";
     public static final String PROCESS_DEFINITION_KEY = "holidayRequest";
-    public static final String EMP_NAME = "empName";
+   // public static final String EMP_NAME = variables.put("employee", TDemande.getEmpName()); ;
     RuntimeService runtimeService;
     TaskService taskService;
     ProcessEngine processEngine;
@@ -59,10 +60,10 @@ public class CongeService {
     public ProcessInstanceResponse applyHoliday(TDemande tDemande) {
 
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("Type conge", tDemande.getTypeconge());
-        variables.put("Date Debut", tDemande.getDateDebut());
-        variables.put("Date Fin", tDemande.getDateFin());
-        variables.put("Commentaire", tDemande.getCommentaire());
+        variables.put("Typeconge", tDemande.getCongeType());
+        variables.put("DateDebut", tDemande.getDateDebut());
+        variables.put("DateFin", tDemande.getDateFin());
+        variables.put("Commentaire", tDemande.getComment());
         variables.put("employee", tDemande.getEmpName());
 
         ProcessInstance processInstance =
@@ -108,9 +109,9 @@ public class CongeService {
     }
 
 
-    public List<TaskDetails> getUserTasks() {
+    public List<TaskDetails> getUserTasks(TDemande td) {
 
-        List<Task> tasks = taskService.createTaskQuery().taskCandidateOrAssigned(EMP_NAME).list();
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateOrAssigned(td.getEmpName()).list();
         List<TaskDetails> taskDetails = getTaskDetails(tasks);
 
         return taskDetails;

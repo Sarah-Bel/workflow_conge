@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity(name="TDemande")
-@Data
+ @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -24,13 +24,13 @@ public class TDemande implements Serializable {
 	 private Long id;
 	
 	@Column
-	 private String Typeconge;
+	 private String congeType;
 	@Column
-	 private  String DateDebut;
+	 private  String dateDebut;
 	@Column
-	 private  String DateFin;
+	 private  String dateFin;
 	@Column
-	 private  String Commentaire;
+	 private  String comment;
 	@Column
 	 private  String empName;
 
