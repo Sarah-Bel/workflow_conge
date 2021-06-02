@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.workflow.dto.ProcessInstanceResponse;
+import com.workflow.dto.Response;
 import com.workflow.dto.TaskDetails;
 
 @CrossOrigin(origins= {"http://localhost:4200"})
@@ -61,16 +62,15 @@ public class CongeController {
     	congerService.acceptHoliday(taskId);
     }
 
-   // @GetMapping("/RH/tasks")
-  //  public List<TaskDetails> getUserTasks() {
-   //     return congerService.getUserTasks();
-    //}
+    @GetMapping("/RH/tasks")
+    public List<TaskDetails> getUserTasks() {
+        return congerService.getUserTasks();
+    }
 
 
     @GetMapping("/process/{processId}")
-    public String checkState(@PathVariable("processId") String processId){
-    	congerService.checkProcessHistory(processId);
-    	return "checkProcessHistory";
+    public Response checkState(@PathVariable("processId") String processId){
+       return congerService.checkProcessHistory(processId);
     }
 
     @PostMapping("/RH/approve/tasks/{taskId}/{approvedRH}")
@@ -86,12 +86,6 @@ public class CongeController {
     		)
     {
     	return congerService.rechercheConge(comment,congeType,empName);
-    }
-    
-    @GetMapping("/Recherche")
-    public  List<TDemande> recherche()
-    {
-    	return congerService.recherche();
     }
 
     
