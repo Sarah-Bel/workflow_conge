@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.workflow.dto.ProcessInstanceResponse;
+import com.workflow.dto.Response;
 import com.workflow.dto.TaskDetails;
 
 @CrossOrigin(origins= {"http://localhost:4200"})
@@ -67,10 +68,10 @@ public class CongeController {
     }
 
 
-  /*  @GetMapping("/process/{processId}")
-    public void checkState(@PathVariable("processId") String processId){
-        congeService.checkProcessHistory(processId);
-    }*/
+    @GetMapping("/process/{processId}")
+    public Response checkState(@PathVariable("processId") String processId){
+       return congerService.checkProcessHistory(processId);
+    }
 
     @PostMapping("/RH/approve/tasks/{taskId}/{approvedRH}")
     public void approveTaskRH(@PathVariable("taskId") String taskId,@PathVariable("approvedRH") Boolean approvedRH){

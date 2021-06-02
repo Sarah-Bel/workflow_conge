@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import com.workflow.dto.ProcessInstanceResponse;
+import com.workflow.dto.Response;
 import com.workflow.dto.TaskDetails;
 
 import org.flowable.engine.HistoryService;
@@ -117,26 +118,26 @@ public class CongeService {
     }
 
 
-//    public void checkProcessHistory(String processId) {
-//
-//        HistoryService historyService = processEngine.getHistoryService();
-//
-//        List<HistoricActivityInstance> activities =
-//                historyService
-//                        .createHistoricActivityInstanceQuery()
-//                        .processInstanceId(processId)
-//                        .finished()
-//                        .orderByHistoricActivityInstanceEndTime()
-//                        .asc()
-//                        .list();
-//
+    public Response checkProcessHistory(String processId) {
+
+        HistoryService historyService = processEngine.getHistoryService();
+
+        List<HistoricActivityInstance> activities =
+                historyService
+                        .createHistoricActivityInstanceQuery()
+                        .processInstanceId(processId)
+                        .finished()
+                        .orderByHistoricActivityInstanceEndTime()
+                        .asc()
+                        .list();
+        
+        Response stateActivity = new Response();
 //        for (HistoricActivityInstance activity : activities) {
-//            System.out.println(
-//                    activity.getActivityId() + " took " + activity.getDurationInMillis() + " milliseconds");
+//        	Response  = activity.getActivityId();
 //        }
-//
-//        System.out.println("\n \n \n \n");
-//    }
+         stateActivity.setActivityId(activities.get(activities.size()-1).getActivityId());
+         return stateActivity;
+      }
     
     public void approveHolidayRH(String taskId,Boolean approvedRH) {
 
