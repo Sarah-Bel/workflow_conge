@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import com.workflow.dto.ProcessInstanceResponse;
 import com.workflow.dto.TaskDetails;
 
+import org.flowable.cmmn.engine.impl.cmd.GetIdentityLinksForCaseInstanceCmd;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.RepositoryService;
@@ -19,8 +20,10 @@ import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
+import org.flowable.variable.api.persistence.entity.VariableInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,7 @@ public class CongeService {
     TaskService taskService;
     ProcessEngine processEngine;
     RepositoryService repositoryService;
+    
     
     @Autowired  
 	congeRepository congeRepository ;
@@ -59,17 +63,19 @@ public class CongeService {
 
     public ProcessInstanceResponse applyHoliday(TDemande tDemande) {
 
+    	
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("Typeconge", tDemande.getCongeType());
         variables.put("DateDebut", tDemande.getDateDebut());
         variables.put("DateFin", tDemande.getDateFin());
         variables.put("Commentaire", tDemande.getComment());
         variables.put("employee", tDemande.getEmpName());
-
+                
         ProcessInstance processInstance =
                 runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY, variables);
 
         return new ProcessInstanceResponse(processInstance.getId(), processInstance.isEnded());
+       
     }
     //***************Table demande de conge *****************************
     public void saveDemande(TDemande tDemande) {
@@ -118,26 +124,27 @@ public class CongeService {
     }
 
 
-//    public void checkProcessHistory(String processId) {
-//
-//        HistoryService historyService = processEngine.getHistoryService();
-//
-//        List<HistoricActivityInstance> activities =
-//                historyService
-//                        .createHistoricActivityInstanceQuery()
-//                        .processInstanceId(processId)
-//                        .finished()
-//                        .orderByHistoricActivityInstanceEndTime()
-//                        .asc()
-//                        .list();
-//
-//        for (HistoricActivityInstance activity : activities) {
-//            System.out.println(
-//                    activity.getActivityId() + " took " + activity.getDurationInMillis() + " milliseconds");
-//        }
-//
-//        System.out.println("\n \n \n \n");
-//    }
+    public String checkProcessHistory(String processId) {
+
+        HistoryService historyService = processEngine.getHistoryService();
+
+        List<HistoricActivityInstance> activities =
+                historyService
+                        .createHistoricActivityInstanceQuery()
+                        .processInstanceId(processId)
+                        .finished()
+                        .orderByHistoricActivityInstanceEndTime()
+                        .asc()
+                        .list();
+
+        for (HistoricActivityInstance activity : activities) {
+            System.out.println(
+                    activity.getActivityId() + " took " + activity.getDurationInMillis() + " milliseconds");
+        }
+
+       System.out.println("\n \n \n \n");
+       return  "ProcessHistory";
+    }
     
     public void approveHolidayRH(String taskId,Boolean approvedRH) {
 
@@ -151,6 +158,11 @@ public class CongeService {
     return congeRepository.findByrechercheid(Commentaire,Typeconge,empName);
     
     }
+    
+    public List<TDemande> recherche() {
+    	
+        return congeRepository.findAll();
+        }
     
     
 

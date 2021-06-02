@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.workflow.dto.ProcessInstanceResponse;
 import com.workflow.dto.TaskDetails;
 
+@CrossOrigin(origins= {"http://localhost:4200"})
 @RestController
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -59,16 +61,17 @@ public class CongeController {
     	congerService.acceptHoliday(taskId);
     }
 
-    @GetMapping("/RH/tasks")
+   // @GetMapping("/RH/tasks")
   //  public List<TaskDetails> getUserTasks() {
    //     return congerService.getUserTasks();
     //}
 
 
-  /*  @GetMapping("/process/{processId}")
-    public void checkState(@PathVariable("processId") String processId){
-        congeService.checkProcessHistory(processId);
-    }*/
+    @GetMapping("/process/{processId}")
+    public String checkState(@PathVariable("processId") String processId){
+    	congerService.checkProcessHistory(processId);
+    	return "checkProcessHistory";
+    }
 
     @PostMapping("/RH/approve/tasks/{taskId}/{approvedRH}")
     public void approveTaskRH(@PathVariable("taskId") String taskId,@PathVariable("approvedRH") Boolean approvedRH){
@@ -77,12 +80,18 @@ public class CongeController {
     
     @GetMapping("/Recherche/{valuers}")
     public  List<TDemande> recherche(
-    		@PathVariable("valuers") String Commentaire,
-    		@PathVariable("valuers") String Typeconge,
+    		@PathVariable("valuers") String comment,
+    		@PathVariable("valuers") String congeType,
     		@PathVariable("valuers") String empName
     		)
     {
-    	return congerService.rechercheConge(Commentaire,Typeconge,empName);
+    	return congerService.rechercheConge(comment,congeType,empName);
+    }
+    
+    @GetMapping("/Recherche")
+    public  List<TDemande> recherche()
+    {
+    	return congerService.recherche();
     }
 
     
